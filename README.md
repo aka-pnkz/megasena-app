@@ -1,5 +1,3 @@
-## 📖 **README.md COMPLETO - MEGA SENA APP**
-
 ```markdown
 # 🎯 Mega Sena App
 
@@ -14,9 +12,9 @@
 ## 📱 Como Usar (3 Passos Simples)
 
 ```
-1️⃣ ESCOLHA QUANTIDADE → 1-20 jogos
-2️⃣ SELECIONE ESTRATÉGIA → Wheeling/Balanceado/Setorial
-3️⃣ ANALISAR DADOS → 📥 BAIXE CSV
+1️ ESCOLHA QUANTIDADE → 1-20 jogos
+2️ SELECIONE ESTRATÉGIA → Wheeling/Balanceado/Setorial
+3️ ANALISAR DADOS → 📥 BAIXE CSV
 ```
 
 ### **✅ PASSO A PASSO COMPLETO:**
@@ -142,9 +140,3 @@ git push
 🔧 Instruções completas
 💾 Instalação local
 ```
-
-**COLE O README → PUSH → GITHUB ATUALIZA!** 🎉
-
-**Agora seu projeto está **PROFISSIONAL** e pronto para compartilhar!**[1]
-
-[1](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/128726754/0c5c2e27-5878-414d-8bea-7fc574957d7e/spreadsheet.xlsx)
