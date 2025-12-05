@@ -65,40 +65,57 @@ def analise_completa(df_sorteios):
     
     return {'freq': frequencia, 'atrasos': atrasos, 'scores': scores, 'pares': pares, 'setores': setores, 'df': df_sorteios}
 
-def validar_jogo(jogo):
+def validar_jogo(jogo, numeros_por_jogo):
     try:
         jogo = sorted(jogo)
-        return (len(jogo) == 6 and len(set(jogo)) == 6 and 
+        return (len(jogo) == numeros_por_jogo and 
+                len(set(jogo)) == numeros_por_jogo and 
                 all(1 <= n <= 60 for n in jogo) and
                 max(jogo) - min(jogo) >= 15 and
-                2 <= sum(1 for n in jogo if n % 2 == 0) <= 4)
+                abs(sum(1 for n in jogo if n % 2 == 0) - numeros_por_jogo/2) <= 1)
     except:
         return False
 
-def gerar_jogos(analise, qtd, estrategia):
+def gerar_jogos(analise, qtd, estrategia, numeros_por_jogo=6):
     scores = analise['scores']
     atrasos = analise['atrasos']
     jogos = []
+    
     for _ in range(qtd):
         if estrategia == "Descarte Wheeling 🥇":
-            top7 = sorted(scores, key=scores.get, reverse=True)[:7]
-            combs = list(itertools.combinations(top7, 6))
-            jogo = list(combs[np.random.randint(0, len(combs))])
+            if numeros_por_jogo == 6:
+                top7 = sorted(scores, key=scores.get, reverse=True)[:7]
+                combs = list(itertools.combinations(top7, 6))
+                jogo = list(combs[np.random.randint(0, len(combs))])
+            else:  # 7 números
+                top9 = sorted(scores, key=scores.get, reverse=True)[:9]
+                combs = list(itertools.combinations(top9, 7))
+                jogo = list(combs[np.random.randint(0, len(combs))])
+                
         elif estrategia == "Mix Balance ⚖️":
-            top_quentes = sorted(scores, key=scores.get, reverse=True)[:12]
-            top_atrasados = sorted(atrasos, key=atrasos.get, reverse=True)[:12]
-            candidatos = top_quentes[:4] + top_atrasados[:4]
-            jogo = sorted(np.random.choice(candidatos, 6, replace=False))
-        else:
-            s1 = np.random.choice(range(1,21), 2, replace=False)
-            s2 = np.random.choice(range(21,41), 2, replace=False)
-            s3 = np.random.choice(range(41,61), 2, replace=False)
-            jogo = sorted(list(s1) + list(s2) + list(s3))
+            top_quentes = sorted(scores, key=scores.get, reverse=True)[:15]
+            top_atrasados = sorted(atrasos, key=atrasos.get, reverse=True)[:15]
+            candidatos = top_quentes[:6] + top_atrasados[:6]
+            jogo = sorted(np.random.choice(candidatos, numeros_por_jogo, replace=False))
+            
+        else:  # Setorial
+            if numeros_por_jogo == 6:
+                s1 = np.random.choice(range(1,21), 2, replace=False)
+                s2 = np.random.choice(range(21,41), 2, replace=False)
+                s3 = np.random.choice(range(41,61), 2, replace=False)
+                jogo = sorted(list(s1) + list(s2) + list(s3))
+            else:  # 7 números
+                s1 = np.random.choice(range(1,21), 3, replace=False)
+                s2 = np.random.choice(range(21,41), 2, replace=False)
+                s3 = np.random.choice(range(41,61), 2, replace=False)
+                jogo = sorted(list(s1) + list(s2) + list(s3))
         
-        if validar_jogo(jogo):
+        if validar_jogo(jogo, numeros_por_jogo):
             jogos.append(jogo)
         else:
-            jogos.append(sorted(np.random.choice(range(1,61), 6, replace=False)))
+            candidatos_fallback = sorted(scores, key=scores.get, reverse=True)[:20]
+            jogos.append(sorted(np.random.choice(candidatos_fallback, numeros_por_jogo, replace=False)))
+    
     return jogos[:qtd]
 
 @st.cache_data
@@ -113,11 +130,33 @@ def monte_carlo(jogos, n_simulacoes=10000):
     total = n_simulacoes * len(jogos)
     return {k: f"1 em {int(total/max(v,1)):,}" for k,v in chances.items()}
 
-st.title("🎯 Mega Sena App v3.1")
+# ===============================================
+# INTERFACE PRINCIPAL
+# ===============================================
+st.title("🎯 Mega Sena App v3.2 - 6 ou 7 Números")
 
 st.sidebar.header("⚙️ Configurações")
-qtd_jogos = st.sidebar.number_input("Quantidade de jogos:", min_value=1, max_value=100, value=7, step=1,
-    help="Digite qualquer número de 1 a 100 jogos")
+
+# 🎯 NOVA SEÇÃO: NÚMEROS POR JOGO
+st.sidebar.subheader("🎮 Números por Jogo")
+numeros_por_jogo = st.sidebar.radio(
+    "Quantos números?",
+    [6, 7],
+    index=0,
+    help="6 números (Mega-Sena) ou 7 números (cobertura extra)"
+)
+
+# Quantidade de jogos (1-100)
+qtd_jogos = st.sidebar.number_input(
+    "Quantidade de jogos:", 
+    min_value=1, 
+    max_value=100, 
+    value=7, 
+    step=1,
+    help="Digite qualquer quantidade (1-100)"
+)
+
+# Estratégia
 estrategia = st.sidebar.selectbox("Estratégia:", [
     "Descarte Wheeling 🥇", "Mix Balance ⚖️", "Setorial 📊"
 ])
@@ -128,11 +167,14 @@ if st.sidebar.button("🔄 Analisar Dados"):
         analise = analise_completa(df)
         st.session_state.df = df
         st.session_state.analise = analise
+        st.session_state.numeros_por_jogo = numeros_por_jogo
         st.success(f"✅ {len(df):,} concursos analisados!")
 
 if 'analise' in st.session_state:
     analise = st.session_state.analise
+    numeros_selecionados = st.session_state.numeros_por_jogo
     
+    # Dashboard
     col1, col2, col3 = st.columns(3)
     with col1:
         st.metric("📊 Concursos", f"{len(analise['df']):,}")
@@ -141,9 +183,14 @@ if 'analise' in st.session_state:
     with col3:
         st.metric("❄️ Mais atrasado", max(analise['atrasos'], key=analise['atrasos'].get))
     
-    st.header(f"🎮 {qtd_jogos} Jogos - {estrategia}")
-    jogos = gerar_jogos(analise, qtd_jogos, estrategia)
+    # Info números por jogo
+    st.info(f"🎯 **{numeros_selecionados} números por jogo** | {qtd_jogos} jogos totais")
     
+    st.header(f"🎮 {qtd_jogos} Jogos ({numeros_selecionados} números) - {estrategia}")
+    jogos = gerar_jogos(analise, qtd_jogos, estrategia, numeros_selecionados)
+    
+    # Tabela dinâmica (6 ou 7 colunas)
+    colunas_jogo = {f'N{j+1}': n for j,n in enumerate(jogos[0])} if jogos else {}
     jogos_df = pd.DataFrame([
         {'Jogo': i+1, **{f'N{j+1}': n for j,n in enumerate(jogo)}}
         for i, jogo in enumerate(jogos)
@@ -158,9 +205,9 @@ if 'analise' in st.session_state:
     st.download_button(
         "📥 Download CSV",
         csv,
-        f"megasena_{estrategia.replace(' ','_')}_{datetime.now().strftime('%Y%m%d')}.csv"
+        f"megasena_{numeros_selecionados}n_{estrategia.replace(' ','_')}_{datetime.now().strftime('%Y%m%d')}.csv"
     )
 else:
     st.info("👆 Clique em 'Analisar Dados' para começar!")
 
-st.caption("✅ Mega Sena App v3.1 - 100% Testado")
+st.caption("✅ Mega Sena App v3.2 - 6 ou 7 números por jogo")
