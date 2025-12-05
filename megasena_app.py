@@ -116,7 +116,8 @@ def monte_carlo(jogos, n_simulacoes=10000):
 st.title("🎯 Mega Sena App v3.1")
 
 st.sidebar.header("⚙️ Configurações")
-qtd_jogos = st.sidebar.number_input("Quantidade de jogos:", 1, 20, 7)
+qtd_jogos = st.sidebar.number_input("Quantidade de jogos:", min_value=1, max_value=100, value=7, step=1,
+    help="Digite qualquer número de 1 a 100 jogos")
 estrategia = st.sidebar.selectbox("Estratégia:", [
     "Descarte Wheeling 🥇", "Mix Balance ⚖️", "Setorial 📊"
 ])
