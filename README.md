@@ -1,4 +1,3 @@
-```markdown
 # 🎯 Mega Sena App
 
 [![Streamlit](https://static.streamlit.io/badges/featured.svg)](https://megasena-app-pnkz.streamlit.app)
@@ -11,11 +10,11 @@
 
 ## 📱 Como Usar (3 Passos Simples)
 
-```
+
 1️ ESCOLHA QUANTIDADE → 1-20 jogos
 2️ SELECIONE ESTRATÉGIA → Wheeling/Balanceado/Setorial
 3️ ANALISAR DADOS → 📥 BAIXE CSV
-```
+
 
 ### **✅ PASSO A PASSO COMPLETO:**
 
@@ -44,62 +43,62 @@
 
 ## 📊 Dashboard e Métricas
 
-```
+
 📊 2800+ concursos analisados
 🔥 Número mais frequente (ex: 10 saiu 428x)
 ❄️ Mais atrasado (ex: 23 - 18 sorteios)
 🎲 Monte Carlo: Teste probabilidades
-```
+
 
 ## 💾 Download Automático
 
 **CSV pronto para lotérica:**
-```
+
 megasena_wheeling_20251205.csv
 Jogo,N1,N2,N3,N4,N5,N6
 1,05,10,23,33,42,53
 2,04,11,25,34,47,56
 ...
-```
+
 
 ## 🔧 Para Bolão (Grupo WhatsApp)
 
-```
+
 👥 10 pessoas × 7 jogos = 70 combinações
 💰 Custo: R$350 (R$35/pessoa)
 🎯 Wheeling garante QUADRA!
 📱 App mobile funciona perfeitamente
-```
+
 
 ## 🛠️ Instalação Local (Opcional)
 
-```
+
 git clone https://github.com/aka-pnkz/megasena-app.git
 cd megasena-app
 pip install -r requirements.txt
 streamlit run megasena_app.py
-```
+
 
 ## 📈 Performance e Estatísticas
 
-```
+
 ✅ 2800 concursos (28 anos dados)
 ✅ Cache inteligente (1s análise)
 ✅ 100% mobile responsivo
 ✅ Download CSV automático
 ✅ 7/7 testes automatizados
 ✅ Python 3.13 compatível
-```
+
 
 ## 🎓 Como Funciona (Técnico)
 
-```
+
 1. Análise frequência histórica (Counter)
 2. Cálculo atraso (último sorteio)
 3. Score composto: 60% freq + 40% atraso
 4. Geração estratégica + validação militar
 5. Monte Carlo 10K simulações probabilísticas
-```
+
 
 ## 📞 Suporte Bolão
 
@@ -117,11 +116,11 @@ streamlit run megasena_app.py
 
 **⭐ Star no GitHub se gostou!**  
 **👥 Compartilhe seu bolão com o app!**
-```
+
 
 ## 🚀 **COMO ATUALIZAR O README:**
 
-```powershell
+
 # 1. DENTRO DA PASTA megasena-app
 notepad README.md
 # Cole o código acima → Salvar
@@ -130,13 +129,12 @@ notepad README.md
 git add README.md
 git commit -m "📖 README completo + estratégias"
 git push
-```
+
 
 ## ✅ **O QUE FICA NO GITHUB:**
-```
+
 📖 README profissional 5 estrelas
 📱 Link direto app
 📊 Tabelas estratégias
 🔧 Instruções completas
 💾 Instalação local
-```
